@@ -1,0 +1,15 @@
+{% load wagtail_events_tags %}
+
+<div class="pagination">
+    {% if page.has_previous %}
+        <a href="?{% querystring 'page' page=page.previous_page_number %}" class="pagination__link pagination__link__prev">previous</a>
+    {% endif %}
+
+    <span class="pagination__info">
+        Page {{ page.number }} of {{ page.paginator.num_pages }}.
+    </span>
+
+    {% if page.has_next %}
+        <a href="?{% querystring 'page' page=page.next_page_number %}" class="pagination__link pagination__link__next">next</a>
+    {% endif %}
+</div>

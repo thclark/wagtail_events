@@ -1,0 +1,44 @@
+{% load i18n wagtailcore_tags wagtail_events_tags %}
+
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+
+    {{ page.body|safe }}
+
+    <ul>
+        <li><a href="{% patch_scope "day" %}">{% trans "Day" %}</a></li>
+        <li><a href="{% patch_scope "week" %}">{% trans "Week" %}</a></li>
+        <li><a href="{% patch_scope "month" %}">{% trans "Month" %}</a></li>
+        <li><a href="{% patch_scope "year" %}">{% trans "Year" %}</a></li>
+    </ul>
+
+    <h2>{% trans "Events" %} ({{ children.scope }}) | {{ children.start_date }} - {{ children.end_date }}</h2>
+
+    <p>{% trans "Results found" %}:{{ children.items|length }}</p>
+
+    <p>
+        <a href="{% patch_start_date children.previous_date %}">{% trans "Previous" %}</a> |
+        <a href="{% patch_start_date children.next_date %}">{% trans "Next" %}</a>
+    </p>
+
+    {% if children.items %}
+        <ul>
+            {% for child in children.items %}
+                <li>
+                    <a href="{{ child.url }}">{{ child.event }} | {{ child.title }}</a>
+                    <p><strong>Start Date:</strong> {{ child.start_date }}</p>
+                    {% if child.end_date %}
+                    <p><strong>End Date:</strong> {{ child.end_date }}</p>
+                    {% endif %}
+                    <p>{{ child.body|safe }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if is_paginated %}
+            {% include "includes/paginator.html" with page=children.items %}
+        {% endif %}
+    {% else %}
+        <p>{% trans "No events found" %}</p>
+    {% endif %}
+{% endblock %}

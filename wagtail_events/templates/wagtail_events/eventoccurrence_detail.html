@@ -1,0 +1,15 @@
+{% load wagtailcore_tags %}
+
+
+{% block content %}
+
+    <h1>{{ object.event.title }} | {{  object.title }}</h1>
+
+    <p><strong>Start Date:</strong> {{ object.start_date }}</p>
+    {% if object.end_date %}
+        <p><strong>End Date:</strong> {{ object.end_date }}</p>
+    {% endif %}
+
+    {{ object.body|safe }}
+
+{% endblock %}

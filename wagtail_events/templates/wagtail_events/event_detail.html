@@ -1,0 +1,25 @@
+{% load i18n wagtailcore_tags %}
+
+
+{% block content %}
+    <h1>{{  page.title }}</h1>
+
+    {{ page.body|safe }}
+
+    {% if page.events.all %}
+        <ul>
+            {% for event in page.events.all %}
+                <li>
+                    <a href="{{ event.url }}">{{ event.event }} | {{ event.title }}</a>
+                    <p><strong>Start Date:</strong> {{ event.start_date }}</p>
+                    {% if event.end_date %}
+                    <p><strong>End Date:</strong> {{ event.end_date }}</p>
+                    {% endif %}
+                    <p>{{ event.body|safe }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans "No events found" %}</p>
+    {% endif %}
+{% endblock %}
