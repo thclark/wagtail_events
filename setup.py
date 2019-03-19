@@ -14,21 +14,14 @@
 from wagtail_events import __version__
 from setuptools import setup, find_packages
 
-with open('README.md') as f:
-    readme_text = f.read()
-
-with open('LICENSE') as f:
-    license_text = f.read()
-
 setup(
     name='wagtail_events',
     version=__version__,
     description='Event features for Wagtail',
-    long_description=readme_text,
     author='thclark',
     url='https://github.com/thclark/wagtail_events',
     packages=find_packages(exclude=('tests', 'docs')),
-    license=license_text,
+    license='MIT',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
