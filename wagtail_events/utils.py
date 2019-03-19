@@ -11,7 +11,7 @@ import datetime
 from django.utils import timezone
 
 
-_DATE_FORMAT_RE = '^([0-9]){4}\.([0-9]){2}\.([0-9]){2}$'
+_DATE_FORMAT_RE = r'^([0-9]){4}\.([0-9]){2}\.([0-9]){2}$'
 
 
 def date_to_datetime(date, time_choice='min'):
