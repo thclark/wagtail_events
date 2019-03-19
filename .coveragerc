@@ -1,0 +1,9 @@
+[paths]
+source =
+    omi_wagtail_library/
+
+[run]
+omit =
+    env/*
+    */tests/*
+    */migrations/*

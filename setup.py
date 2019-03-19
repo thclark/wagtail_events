@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 # Note:
+#
+#   This medium article descripbes the travis / releases integration steps:
+#       https://medium.com/@mikkokotila/deploying-python-packages-to-pypi-with-travis-works-9a6597781556
+#
 #   The Hitchiker's guide to python provides an excellent, standard, method for creating python packages:
 #       http://docs.python-guide.org/en/latest/writing/structure/
 #
@@ -30,8 +34,9 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.6'
-        'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        "Operating System :: OS Independent"
     ],
     include_package_data=True,
     install_requires=[

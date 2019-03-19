@@ -1,0 +1,15 @@
+dist: trusty
+language: python
+python:
+- '3.6'
+install:
+- pip install tox-travis
+script:
+- tox -r
+deploy:
+  provider: pypi
+  user: thclark
+  password:
+    secure: R4LtABoF71XL1aO+1VbcDoZq7uYHa3b3+6EcBfUa+dkTyewiUAdIVJRZK7MtTRn9Jv2xipiSpR8KFN4BQg8s0UMv/qhpkAj2wieRd6DHdsk9Z2ne6bGGePB/i5B64qj6CRrgOr3oEsDQ31aTdlpuTy1RySIAy2mjqera9WE5sQqM3Xed6QjiqWO+X9wravw8WpV38Op3AOnQpcVkV64FDoIV18fabL6w9wBhnhvrKFi/LVClShGD4aWTyAIjZgWor98/wRikWxkb8vcETZHDZGKEyjufN5n++FYL57/rbRE9P6jMGESjvIq9ITe/9LyTlWkpmv7fnNjRmBskx5eu2mYdFQgd9rwJ6ZaUDpk0arSom/KZ7p7PhGm6/Z/OYSwavHGpNd4ar6t0HnHcMFV8lPPYXxkwkKU9IVHUsntDPnL8DiO36aMPW0btUGDzdMrZNziFowyBGPSqMVDfM5Y/iJHafuo+1V5DbgfmBAnva0JQrwbfdLb3lC19vK/CiwHIfw82d9u8XcfPMM9g2hBdgdZ0aKAu99S1gNmc6hluFZW/lwwkSfugsB5kCVFYOjS5uSgObZ1NxX5K6jGyF0S2kfEn/cgSfS/Fc5yXCC24nezPYYVxHLP3LpJABrfYXbhbUOrcvdrgOY3sLxe/cp/6kkozAUDR9qGkVPrmBewZUcM=
+  on:
+    branch: master
