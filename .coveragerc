@@ -1,6 +1,6 @@
 [paths]
 source =
-    omi_wagtail_library/
+    wagtail_events/
 
 [run]
 omit =
