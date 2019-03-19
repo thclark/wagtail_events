@@ -10,9 +10,9 @@ from django.test import RequestFactory, TestCase
 from django.utils import timezone
 from mock import patch, Mock
 from modelcluster.fields import ParentalKey
-from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin
-from wagtail.wagtailcore.fields import RichTextField
-from wagtail.wagtailcore.models import Page
+from wagtail.contrib.routable_page.models import RoutablePageMixin
+from wagtail.core.fields import RichTextField
+from wagtail.core.models import Page
 from wagtail_factories import SiteFactory
 
 from tests import factories

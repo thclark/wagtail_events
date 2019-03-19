@@ -14,11 +14,11 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
 
-    'wagtail.wagtailcore',
-    'wagtail.wagtailimages',
-    'wagtail.wagtailsites',
-    'wagtail.wagtailusers',
-
+    'wagtail.core',
+    'wagtail.images',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.contrib.routable_page',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -62,8 +62,10 @@ TEMPLATES = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'events',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'events',
     }
 }
 
