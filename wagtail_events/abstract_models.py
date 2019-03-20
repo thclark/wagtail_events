@@ -8,7 +8,7 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.models import Page
 
-from wagtail_events.managers import EventOccurrenceManager
+from wagtail_events.managers import SubEventManager
 from wagtail_events.utils import _DATE_FORMAT_RE
 
 
@@ -133,9 +133,9 @@ class AbstractEventIndex(AbstractPaginatedIndex):
         return _DATE_FORMAT_RE
 
 
-class AbstractEventOccurrence(models.Model):
+class AbstractSubEvent(models.Model):
     """ """
-    title = models.CharField(max_length=255)
+    title = models.CharField(blank=True, null=False, max_length=255, help_text="Optional specific event name (eg the lecture name within an event series)")
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(blank=True, null=True)
 
@@ -144,7 +144,7 @@ class AbstractEventOccurrence(models.Model):
         abstract = True
         ordering = ['start_date']
 
-    objects = EventOccurrenceManager()
+    objects = SubEventManager()
 
     panels = [
         FieldPanel('title'),
@@ -154,7 +154,7 @@ class AbstractEventOccurrence(models.Model):
 
     def clean(self):
         """Clean the model fields, if end_date is before start_date raise a ValidationError."""
-        super(AbstractEventOccurrence, self).clean()
+        super(AbstractSubEvent, self).clean()
         if self.end_date:
             if self.end_date < self.start_date:
                 raise ValidationError({

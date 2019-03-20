@@ -1,10 +1,3 @@
-# -*- coding:utf8 -*-
-"""
-Wagtail events date filters.
-"""
-
-from __future__ import unicode_literals
-
 from datetime import datetime, timedelta
 from isoweek import Week
 
@@ -31,7 +24,7 @@ def get_year_agenda(model, queryset, start_date):
         'items': model.objects.in_date_range(
             start_date,
             utils.date_to_datetime(end_date, 'max')
-        ).filter(event__in=queryset),
+        ).filter(event_series__in=queryset),
         'next_date': utils.date_to_datetime(
             utils.add_months(start_date.date(), 12)
         ),
@@ -60,7 +53,7 @@ def get_month_agenda(model, queryset, start_date):
         'end_date': end_date,
         'scope': 'Month',
         'items': model.objects.in_date_range(start_date, end_date).filter(
-            event__in=queryset
+            event_series__in=queryset
         ),
         'next_date': utils.date_to_datetime(
             utils.add_months(start_date.date(), 1)
@@ -88,7 +81,7 @@ def get_week_agenda(model, queryset, start_date):
         'end_date': end_date,
         'scope': 'Week',
         'items': model.objects.in_date_range(start_date, end_date).filter(
-            event__in=queryset
+            event_series__in=queryset
         ),
         'next_date': start_date + timedelta(days=7),
         'previous_date': start_date + timedelta(days=-7),
@@ -110,7 +103,7 @@ def get_day_agenda(model, queryset, start_date):
         'end_date': utils.date_to_datetime(start_date.date(), 'max'),
         'scope': 'Day',
         'items': model.objects.in_date_range(start_date, next_date).filter(
-            event__in=queryset
+            event_series__in=queryset
         ),
         'next_date': next_date,
         'previous_date': start_date + timedelta(days=-1),

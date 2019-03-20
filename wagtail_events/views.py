@@ -1,10 +1,8 @@
-from __future__ import unicode_literals
-
 from django.views.generic import DetailView
 
-from wagtail_events.models import EventOccurrence
+from wagtail_events.models import SubEvent
 
 
-class EventOccurrenceDetailView(DetailView):
-    """EventOccurrence detail view."""
-    model = EventOccurrence
+class SubEventDetailView(DetailView):
+    """SubEvent detail view."""
+    model = SubEvent

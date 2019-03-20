@@ -1,14 +1,7 @@
-# -*- coding:utf8 -*-
-"""
-Wagtail events model managers
-"""
-
-from __future__ import unicode_literals
-
 from django.db.models import Manager
 
 
-class EventOccurrenceManager(Manager):
+class SubEventManager(Manager):
     @staticmethod
     def _get_min_time(dt):
         """

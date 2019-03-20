@@ -36,31 +36,31 @@ class TestAbstractEventIndex(TestCase):
         ))
 
 
-class TestAbstractEventOccurrence(TestCase):
-    """Test fot the AbstractEventOccurrence model."""
+class TestAbstractSubEvent(TestCase):
+    """Tests for the AbstractSubEvent model."""
     def setUp(self):
-        self.model = abstract_models.AbstractEventOccurrence
+        self.model = abstract_models.AbstractSubEvent
 
     def test_parent_class(self):
-        """AbstractEventOccurrence should inhert from models.Model."""
+        """AbstractSubEvent should inhert from models.Model."""
         self.assertTrue(issubclass(self.model, models.Model))
 
     def test_title(self):
-        """Test the AbstractEventOccurrence.title field."""
+        """Test the AbstractSubEvent.title field."""
         field = self.model._meta.get_field('title')
         self.assertIsInstance(field, models.CharField)
-        self.assertFalse(field.blank)
+        self.assertTrue(field.blank)
         self.assertFalse(field.null)
 
     def test_start_date(self):
-        """Test the AbstractEventOccurrence.start_date field."""
+        """Test the AbstractSubEvent.start_date field, which may be blank."""
         field = self.model._meta.get_field('start_date')
         self.assertIsInstance(field, models.DateTimeField)
         self.assertFalse(field.blank)
         self.assertFalse(field.null)
 
     def test_end_date(self):
-        """Test the AbstractEventOccurrence.end_date field."""
+        """Test the AbstractSubEvent.end_date field."""
         field = self.model._meta.get_field('end_date')
         self.assertIsInstance(field, models.DateTimeField)
         self.assertTrue(field.blank)

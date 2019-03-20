@@ -1,7 +1,3 @@
-# -*- coding:utf8 -*-
-
-from __future__ import unicode_literals
-
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
@@ -11,42 +7,42 @@ from django.utils import timezone
 from mock import patch, Mock
 from modelcluster.fields import ParentalKey
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-from wagtail.core.fields import RichTextField
+from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail_factories import SiteFactory
 
 from tests import factories
 from wagtail_events import abstract_models
 from wagtail_events import models
-from wagtail_events.views import EventOccurrenceDetailView
+from wagtail_events.views import SubEventDetailView
 from wagtail_events.utils import _DATE_FORMAT_RE
 
 
-class TestEventDetail(TestCase):
-    """Tests for the EventDetail model."""
+class TestEventSeries(TestCase):
+    """Tests for the EventSeries model."""
     def setUp(self):
-        self.model = models.EventDetail
+        self.model = models.EventSeries
 
     def test_parent_class(self):
-        """EventDetail should inhert from Page & RoutablePageMixin."""
+        """EventSeries should inhert from Page & RoutablePageMixin."""
         self.assertTrue(issubclass(self.model, Page))
         self.assertTrue(issubclass(self.model, RoutablePageMixin))
 
     def test_body(self):
-        """Test the EventDetail.body field."""
+        """Test the EventSeries.body field."""
         field = self.model._meta.get_field('body')
 
-        self.assertIsInstance(field, RichTextField)
-        self.assertFalse(field.blank)
+        self.assertIsInstance(field, StreamField)
+        self.assertTrue(field.blank)
         self.assertFalse(field.null)
 
     def test_event_view(self):
-        """Test EventDetail.event_view returns the expected data."""
+        """Test EventSeries.event_view returns the expected data."""
         request = RequestFactory().get('')
         request.is_preview = False
-        detail = factories.EventDetailFactory.create(parent=None)
-        instance = factories.EventOccurrenceFactory.create(
-            event=detail,
+        detail = factories.EventSeriesFactory.create(parent=None)
+        instance = factories.SubEventFactory.create(
+            event_series=detail,
             start_date=timezone.now(),
         )
         response = detail.event_view(request, pk=instance.pk)
@@ -55,7 +51,7 @@ class TestEventDetail(TestCase):
         self.assertEqual(response.context_data['object'], instance)
         self.assertIsInstance(
             response.context_data['view'],
-            EventOccurrenceDetailView,
+            SubEventDetailView,
         )
 
 
@@ -67,20 +63,20 @@ class TestEventIndex(TestCase):
             parent=None,
             paginate_by=10
         )
-        self.detail = factories.EventDetailFactory.create(
+        self.detail = factories.EventSeriesFactory.create(
             parent=self.index,
             show_in_menus=True,
         )
-        self.detail_2 = factories.EventDetailFactory.create(
+        self.detail_2 = factories.EventSeriesFactory.create(
             parent=self.index,
             show_in_menus=False,
         )
-        self.instance = factories.EventOccurrenceFactory.create(
-            event=self.detail,
+        self.instance = factories.SubEventFactory.create(
+            event_series=self.detail,
             start_date=timezone.now(),
         )
-        self.instance_2 = factories.EventOccurrenceFactory.create(
-            event=self.detail_2,
+        self.instance_2 = factories.SubEventFactory.create(
+            event_series=self.detail_2,
             start_date=timezone.now(),
         )
         self.request = RequestFactory().get('')
@@ -97,8 +93,8 @@ class TestEventIndex(TestCase):
         """Test the EventIndex.body field."""
         field = self.model._meta.get_field('body')
 
-        self.assertIsInstance(field, RichTextField)
-        self.assertFalse(field.blank)
+        self.assertIsInstance(field, StreamField)
+        self.assertTrue(field.blank)
         self.assertFalse(field.null)
 
     def test_get_children(self):
@@ -184,8 +180,8 @@ class TestEventIndex(TestCase):
 
     def test_pagination(self):
         """Test EventIndex.get_context paginates correctly."""
-        factories.EventOccurrenceFactory.create(
-            event=self.detail,
+        factories.SubEventFactory.create(
+            event_series=self.detail,
             start_date=timezone.now(),
         )
         self.index.paginate_by = 1
@@ -207,41 +203,41 @@ class TestEventIndex(TestCase):
         self.assertNotIn(self.instance_2, context['children']['items'].object_list)
 
 
-class TestEventOccurrence(TestCase):
-    """Tests for the EventOccurrence model."""
+class TestSubEvent(TestCase):
+    """Tests for the SubEvent model."""
     def setUp(self):
-        self.model = models.EventOccurrence
+        self.model = models.SubEvent
 
     def test_parent_class(self):
-        """The EventOccurrence model should inhert from AbstractEventOccurrence."""
+        """The SubEvent model should inhert from AbstractSubEvent."""
         self.assertTrue(issubclass(
             self.model,
-            abstract_models.AbstractEventOccurrence
+            abstract_models.AbstractSubEvent
         ))
 
     def test_body(self):
-        """Test the EventOccurrence.body field."""
+        """Test the SubEvent.body field."""
         field = self.model._meta.get_field('body')
 
-        self.assertIsInstance(field, RichTextField)
-        self.assertFalse(field.blank)
+        self.assertIsInstance(field, StreamField)
+        self.assertTrue(field.blank)
         self.assertFalse(field.null)
 
     def test_event(self):
-        """Test the EventOccurrence.event relationship."""
-        field = self.model._meta.get_field('event')
+        """Test the SubEvent.event relationship."""
+        field = self.model._meta.get_field('event_series')
 
         self.assertIsInstance(field, ParentalKey)
         self.assertFalse(field.blank)
         self.assertFalse(field.null)
 
     def test_url(self):
-        """Test the EventOccurrence.url method return the correct data."""
+        """Test the SubEvent.url method return the correct data."""
         index = factories.EventIndexFactory.create(parent=None)
         SiteFactory.create(root_page=index)
-        detail = factories.EventDetailFactory.create(parent=index)
-        instance = factories.EventOccurrenceFactory.create(
-            event=detail,
+        detail = factories.EventSeriesFactory.create(parent=index)
+        instance = factories.SubEventFactory.create(
+            event_series=detail,
             start_date=timezone.now(),
         )
         self.assertEqual(instance.url, '{}{}/'.format(detail.url, instance.pk))
@@ -249,8 +245,8 @@ class TestEventOccurrence(TestCase):
     def test_clean(self):
         """Clean should raise a validation error when end_date is before the start_date."""
         now = timezone.now()
-        instance = models.EventOccurrence(
-                event=factories.EventDetailFactory.create(parent=None),
+        instance = models.SubEvent(
+                event_series=factories.EventSeriesFactory.create(parent=None),
                 start_date=now,
                 end_date=now-timedelta(minutes=1),
         )

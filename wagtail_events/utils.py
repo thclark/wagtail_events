@@ -1,10 +1,3 @@
-# -*- coding:utf8 -*-
-"""
-Wagtail events utilities
-"""
-
-from __future__ import unicode_literals
-
 import calendar
 import datetime
 
