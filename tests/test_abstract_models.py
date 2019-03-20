@@ -1,7 +1,3 @@
-# -*- coding:utf8 -*-
-
-from __future__ import unicode_literals
-
 from django.db import models
 from django.test import TestCase
 from wagtail.core.models import Page

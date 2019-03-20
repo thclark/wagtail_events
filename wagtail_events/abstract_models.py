@@ -1,7 +1,3 @@
-# -*- coding:utf8 -*-
-
-from __future__ import unicode_literals
-
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models

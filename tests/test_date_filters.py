@@ -1,7 +1,3 @@
-# -*- coding:utf8 -*-
-
-from __future__ import unicode_literals
-
 from datetime import timedelta
 
 from django.test import TestCase

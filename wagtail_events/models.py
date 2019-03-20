@@ -4,7 +4,7 @@ import re
 from django.db.models import CharField
 from django.utils import timezone
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.blocks import CharBlock, TextBlock, BlockQuoteBlock
 from wagtail.core.fields import StreamField
@@ -18,8 +18,6 @@ from wagtail_events import utils
 
 class EventSeries(RoutablePageMixin, Page):
 
-    # title = CharField(blank=False, null=False, max_length=120, help_text='Provide a name for your event or event series')
-
     body = StreamField([
         ('heading', CharBlock(required=False, label='Event / Event Series description subheading', max_length=120, help_text="Add optional subheadings between paragraphs, if you're describing the event in more detail")),
         ('paragraph', TextBlock(required=False, label='Event / Event Series description text', help_text='Tell people about the event or event series')),
@@ -27,7 +25,7 @@ class EventSeries(RoutablePageMixin, Page):
     ], blank=True, help_text='Add a description of this event or event series.')
 
     content_panels = Page.content_panels + [
-        FieldPanel('body'),
+        StreamFieldPanel('body'),
         InlinePanel('sub_events', label='Event Date(s)'),
     ]
 
@@ -41,8 +39,6 @@ class EventSeries(RoutablePageMixin, Page):
 
 
 class SubEvent(abstracts.AbstractSubEvent):
-
-    title = CharField(max_length=120, blank=True, null=False, help_text='Title for this event, e.g. the lecture name in an event series')
 
     body = StreamField([
         ('heading', CharBlock(required=False, label='Sub-event description subheading', max_length=120, help_text="Add optional subheadings between paragraphs, if you're describing the event in more detail")),
@@ -59,7 +55,9 @@ class SubEvent(abstracts.AbstractSubEvent):
         url = self.event_series.reverse_subpage('event_detail', kwargs={'pk': self.pk})
         return self.event_series.url + url
 
-    panels = abstracts.AbstractSubEvent.panels + [FieldPanel('body'), FieldPanel('title')]
+    panels = abstracts.AbstractSubEvent.panels + [
+        StreamFieldPanel('body'),
+    ]
 
 
 class EventIndex(abstracts.AbstractEventIndex):
@@ -70,7 +68,7 @@ class EventIndex(abstracts.AbstractEventIndex):
     ], blank=True, help_text='Specify what people see when they reach the events page')
 
     content_panels = abstracts.AbstractPaginatedIndex.content_panels + [
-        FieldPanel('body'),
+        StreamFieldPanel('body'),
     ]
 
     def _get_children(self, request):
