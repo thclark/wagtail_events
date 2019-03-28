@@ -1,7 +1,7 @@
-from django.db.models import Manager
+from wagtail.core.models import PageManager
 
 
-class SubEventManager(Manager):
+class DatedEventManager(PageManager):
     @staticmethod
     def _get_min_time(dt):
         """
@@ -19,3 +19,10 @@ class SubEventManager(Manager):
         start = self._get_min_time(start)
         end = self._get_min_time(end)
         return self.filter(start_date__gte=start, start_date__lte=end)
+
+    def live(self):
+        """
+        Get event dates associated with live event series
+        :return: Filtered django model queryset
+        """
+        return self.filter(live=True)

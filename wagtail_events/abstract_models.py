@@ -1,10 +1,15 @@
+import datetime
+import re
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel
+from django.utils import timezone
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.core.models import Page
 
-from wagtail_events.managers import SubEventManager
+from wagtail_events import date_filters
+from wagtail_events.managers import DatedEventManager
+from wagtail_events import utils
 from wagtail_events.utils import _DATE_FORMAT_RE
 
 
@@ -128,31 +133,65 @@ class AbstractEventIndex(AbstractPaginatedIndex):
         """Returns the dateformat."""
         return _DATE_FORMAT_RE
 
+    def _get_children(self, request, *args, **kwargs):
+        """
+        :param request: django request
+        :return: Queryset of child model instances
+        """
+        qs = super(AbstractEventIndex, self)._get_children(request)
 
-class AbstractSubEvent(models.Model):
-    """ """
-    title = models.CharField(blank=True, null=False, max_length=255, help_text="Optional specific event name (eg the lecture name within an event series)")
+        default_period = 'day'
+        time_periods = {
+            'year': date_filters.get_year_agenda,
+            'week': date_filters.get_week_agenda,
+            'month': date_filters.get_month_agenda,
+            default_period: date_filters.get_day_agenda,
+        }
+        period = request.GET.get('scope', default_period).lower()
+
+        start_date = request.GET.get('start_date', '')
+        if re.match(self.get_dateformat(), start_date):
+            date_params = [int(i) for i in start_date.split('.')]
+            start_date = utils.date_to_datetime(datetime.date(*date_params))
+        else:
+            start_date = timezone.now().replace(
+                hour=0,
+                minute=0,
+                second=0,
+                microsecond=0,
+            )
+
+        model_class = self.__class__.allowed_subpage_models()[0]
+        return time_periods[period](model_class, qs, start_date)
+
+
+class AbstractEvent(Page):
+
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(blank=True, null=True)
+    objects = DatedEventManager()
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel('start_date'),
+                FieldPanel('end_date'),
+            ],
+            heading="Event Start / End Dates"
+        ),
+    ]
+
+    parent_page_types = ['wagtail_events.EventIndex']
+    subpage_types = []
 
     class Meta(object):
         """Django model meta options."""
         abstract = True
         ordering = ['start_date']
 
-    objects = SubEventManager()
-
-    panels = [
-        FieldPanel('title'),
-        FieldPanel('start_date'),
-        FieldPanel('end_date'),
-    ]
-
     def clean(self):
         """Clean the model fields, if end_date is before start_date raise a ValidationError."""
-        super(AbstractSubEvent, self).clean()
+        super(AbstractEvent, self).clean()
         if self.end_date:
             if self.end_date < self.start_date:
-                raise ValidationError({
-                    'end_date': 'The end date cannot be before the start date.'
-                })
+                raise ValidationError({'end_date': 'The end date cannot be before the start date.'})

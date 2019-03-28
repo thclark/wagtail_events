@@ -1,8 +1,7 @@
 from django.views.generic import DetailView
 
-from wagtail_events.models import SubEvent
+from wagtail_events.models import Event
 
 
-class SubEventDetailView(DetailView):
-    """SubEvent detail view."""
-    model = SubEvent
+class EventDetailView(DetailView):
+    model = Event
