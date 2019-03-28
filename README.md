@@ -65,15 +65,6 @@ python manage migrate wagtail_events
 
 An index/listing page for EventSeries instances, with optional pagination.
 
-### EventSeries
+### Event
 
-A detail page for an event series, the EventSeries can contain single or multiple SubEvent instances.
-
-### SubEvent
-
-An single occurrence of an event.
-
-## Future Development Plans:
-
-- EventSingleton: A single event that will only have a single occurrence.
-
+A detail page for an event, with start_date and optional end_date, implementing a manager which allows filtering on those dates.
