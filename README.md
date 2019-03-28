@@ -16,6 +16,7 @@ and have control of the release versioning (which isn't close to ready for v1.x 
  [migration headache](http://docs.wagtail.io/en/v2.4/topics/streamfield.html#migrating-richtextfields-to-streamfield) 
  unless we start fresh.
  - The migrations in the original project won't work with an in-memory database, so testing is slow.
+ - I've majorly simplified the model structure to singleton events. I think this is all that's reqiured in 99.9% of cases.
 
 I'm extremely open to collaboration - in fact, I really don't want to be maintaining this (it's only for one client) so
 I'm open to transferring ownership or collaboration to anyone who wants to take this on and enhance it. @omni-digital,
