@@ -124,13 +124,14 @@ class AbstractPaginatedIndex(Page):
 
 
 class AbstractEventIndex(AbstractPaginatedIndex):
-    """ """
+
     class Meta(object):
-        """Django model meta options."""
         abstract = True
 
     def get_dateformat(self):
-        """Returns the dateformat."""
+        """
+        Returns the date format regex
+        """
         return _DATE_FORMAT_RE
 
     def _get_children(self, request, *args, **kwargs):
@@ -175,7 +176,7 @@ class AbstractEvent(Page):
     end_date = models.DateTimeField(blank=True, null=True)
     objects = DatedEventManager()
 
-    content_panels = Page.content_panels + [
+    content_panels = [
         MultiFieldPanel(
             [
                 FieldPanel('start_date'),
@@ -189,7 +190,6 @@ class AbstractEvent(Page):
     subpage_types = []
 
     class Meta(object):
-        """Django model meta options."""
         abstract = True
         ordering = ['start_date']
 
