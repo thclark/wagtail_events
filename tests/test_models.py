@@ -25,7 +25,6 @@ class TestEvent(TestCase):
     def setUp(self):
         self.model = models.Event
 
-
     def test_parent_class(self):
         """
         Event should inherit from Page
