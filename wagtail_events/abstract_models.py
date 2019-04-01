@@ -140,8 +140,6 @@ class AbstractEventIndex(AbstractPaginatedIndex):
         :return: Queryset of child model instances
         """
         qs = super(AbstractEventIndex, self)._get_children(request)
-        print('WHOOOO')
-        print(qs)
         default_period = 'day'
         time_periods = {
             'year': date_filters.get_year_agenda,
@@ -166,7 +164,7 @@ class AbstractEventIndex(AbstractPaginatedIndex):
         model_class = self.__class__.allowed_subpage_models()[0]
         try:
             return time_periods[period](model_class, qs, start_date)
-        except AttributeError as e:
+        except AttributeError:
             return qs
 
 
