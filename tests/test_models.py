@@ -1,14 +1,11 @@
 # from datetime import timedelta
-
 # from django.core.exceptions import ValidationError
 # from django.core.paginator import Page as PaginatorPage
 from django.core.paginator import Paginator
 from django.test import RequestFactory, TestCase
-from django.urls import reverse
 from django.utils import timezone
 from mock import patch, Mock
 # from modelcluster.fields import ParentalKey
-from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 # from wagtail_factories import SiteFactory
@@ -16,7 +13,6 @@ from wagtail.core.models import Page
 from tests import factories
 from wagtail_events import abstract_models
 from wagtail_events import models
-from wagtail_events.views import EventDetailView
 from wagtail_events.utils import _DATE_FORMAT_RE
 
 

@@ -56,6 +56,4 @@ def get_day_range(start_date):
     """
     start_date = utils.date_to_datetime(start_date.date(), 'min')
     end_date = utils.date_to_datetime(start_date.date(), 'max')
-    print('start_date', start_date)
-    print('end_date', end_date)
     return start_date, end_date
