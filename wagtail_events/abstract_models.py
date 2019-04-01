@@ -137,37 +137,40 @@ class AbstractEventIndex(AbstractPaginatedIndex):
     def _get_children(self, request, *args, **kwargs):
         """
         :param request: django request
-        :return: Queryset of child model instances
+        :return: Queryset of child model instances, filtered by a scope and start date in the request params
         """
-        qs = super(AbstractEventIndex, self)._get_children(request)
-        print('WHOOOO')
-        print(qs)
-        default_period = 'day'
+        qs = super(AbstractEventIndex, self)._get_children(request).specific()
+
         time_periods = {
-            'year': date_filters.get_year_agenda,
-            'week': date_filters.get_week_agenda,
-            'month': date_filters.get_month_agenda,
-            default_period: date_filters.get_day_agenda,
+            'year': date_filters.get_year_range,
+            'week': date_filters.get_week_range,
+            'month': date_filters.get_month_range,
+            'day': date_filters.get_day_range,
         }
-        period = request.GET.get('scope', default_period).lower()
+        period = request.GET.get('scope', None)
 
-        start_date = request.GET.get('start_date', '')
-        if re.match(self.get_dateformat(), start_date):
-            date_params = [int(i) for i in start_date.split('.')]
-            start_date = utils.date_to_datetime(datetime.date(*date_params))
-        else:
-            start_date = timezone.now().replace(
-                hour=0,
-                minute=0,
-                second=0,
-                microsecond=0,
-            )
+        if period:
 
-        model_class = self.__class__.allowed_subpage_models()[0]
-        try:
-            return time_periods[period](model_class, qs, start_date)
-        except AttributeError as e:
-            return qs
+            # Get the start date from the request (or use default now)
+            start_date = request.GET.get('start_date', '')
+            if re.match(self.get_dateformat(), start_date):
+                date_params = [int(i) for i in start_date.split('.')]
+                start_date = utils.date_to_datetime(datetime.date(*date_params))
+            else:
+                start_date = timezone.now().replace(
+                    hour=0,
+                    minute=0,
+                    second=0,
+                    microsecond=0,
+                )
+
+            # Clean the start and end dates to conform to the requested period
+            start_date, end_date = time_periods[period.lower()](start_date)
+
+            # Filter the original queryset to the date range specified
+            qs.filter(start_date__gte=start_date).filter(end_date__lte=end_date)
+
+        return qs
 
 
 class AbstractEvent(Page):

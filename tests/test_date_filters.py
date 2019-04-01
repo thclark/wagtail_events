@@ -1,11 +1,11 @@
-from datetime import timedelta
+# from datetime import timedelta
 
 from django.test import TestCase
 from django.utils import timezone
 
 from tests.factories import EventFactory
-from wagtail_events import date_filters
-from wagtail_events.models import Event
+# from wagtail_events import date_filters
+# from wagtail_events.models import Event
 
 
 class TestAgendas(TestCase):

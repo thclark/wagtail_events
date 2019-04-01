@@ -1,10 +1,8 @@
 from django.db import models
-from django.urls import reverse
 from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, MultiFieldPanel
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.blocks import CharBlock, TextBlock, BlockQuoteBlock
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Orderable
+from wagtail.core.models import Page
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 
