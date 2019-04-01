@@ -4,6 +4,7 @@
 # from django.core.paginator import Page as PaginatorPage
 from django.core.paginator import Paginator
 from django.test import RequestFactory, TestCase
+from django.urls import reverse
 from django.utils import timezone
 from mock import patch, Mock
 # from modelcluster.fields import ParentalKey
@@ -24,10 +25,12 @@ class TestEvent(TestCase):
     def setUp(self):
         self.model = models.Event
 
+
     def test_parent_class(self):
-        """Event should inhert from Page & RoutablePageMixin."""
+        """
+        Event should inherit from Page
+        """
         self.assertTrue(issubclass(self.model, Page))
-        self.assertTrue(issubclass(self.model, RoutablePageMixin))
 
     def test_body(self):
         """Test the Event.body field."""
@@ -36,20 +39,6 @@ class TestEvent(TestCase):
         self.assertIsInstance(field, StreamField)
         self.assertTrue(field.blank)
         self.assertFalse(field.null)
-
-    def test_event_view(self):
-        """Test EventSeries.event_view returns the expected data."""
-        request = RequestFactory().get('')
-        request.is_preview = False
-        detail = factories.EventFactory.create(parent=None, start_date=timezone.now())
-        response = detail.event_view(request, pk=detail.pk)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context_data['object'], detail)
-        self.assertIsInstance(
-            response.context_data['view'],
-            EventDetailView,
-        )
 
 
 class TestEventIndex(TestCase):
