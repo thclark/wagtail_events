@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('wagtailcore', '0040_page_draft_title'),
-        ('wagtailimages', '0021_image_file_hash'),
+        migrations.swappable_dependency(get_image_model_string())
     ]
 
     operations = [
