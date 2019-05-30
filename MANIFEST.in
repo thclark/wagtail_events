@@ -1,5 +1,5 @@
 include LICENSE
 include README.md
-recursive-include wagtail_references/static *
-recursive-include wagtail_references/templates *
+recursive-include wagtail_events/static *
+recursive-include wagtail_events/templates *
 recursive-include docs *
