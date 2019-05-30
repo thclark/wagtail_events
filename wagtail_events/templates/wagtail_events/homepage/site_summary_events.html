@@ -1,0 +1,11 @@
+{% load i18n wagtailadmin_tags %}
+
+<li class="icon icon-date">
+    <a href="{% url 'wagtailevents:index' %}">
+    {% blocktrans count counter=total_events with total_events|intcomma as total %}
+        <span>{{ total }}</span> Event
+    {% plural %}
+        <span>{{ total }}</span> Events
+    {% endblocktrans %}
+    </a>
+</li>

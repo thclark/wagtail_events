@@ -11,12 +11,11 @@
 #   To deploy on PYPI follow the instructions at the bottom of:
 #       https://packaging.python.org/tutorials/distributing-packages/#uploading-your-project-to-pypi
 
-from wagtail_events import __version__
 from setuptools import setup, find_packages
 
 setup(
     name='wagtail_events',
-    version=__version__,
+    version='0.2.2',
     description='EventSeries features for Wagtail',
     author='thclark',
     url='https://github.com/thclark/wagtail_events',
