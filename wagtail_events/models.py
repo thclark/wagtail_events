@@ -42,5 +42,4 @@ class Event(AbstractEvent):
 
 
 class EventIndex(AbstractEventIndex):
-    parent_page_types = []
     subpage_types = ['wagtail_events.Event']
