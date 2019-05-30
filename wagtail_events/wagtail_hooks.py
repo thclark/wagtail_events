@@ -27,7 +27,7 @@ class EventModelAdmin(ModelAdmin):
     menu_icon = 'date'  # change as required
     menu_order = 300  # will put in 3rd place (000 being 1st, 100 2nd)
     add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
-    exclude_from_explorer = False # or True to exclude pages of this type from Wagtail's explorer view
+    exclude_from_explorer = False  # or True to exclude pages of this type from Wagtail's explorer view
     list_display = ('title', 'description',)
     list_filter = ('title', )
     search_fields = ('title', 'description',)
@@ -39,4 +39,3 @@ class EventModelAdmin(ModelAdmin):
 
 
 modeladmin_register(EventModelAdmin)
-
