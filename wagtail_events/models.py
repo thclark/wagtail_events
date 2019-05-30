@@ -43,3 +43,7 @@ class Event(AbstractEvent):
 
 class EventIndex(AbstractEventIndex):
     subpage_types = ['wagtail_events.Event']
+
+    class Meta:
+        verbose_name = 'Event index page'
+        verbose_name_plural = 'Event index pages'

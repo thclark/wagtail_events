@@ -15,7 +15,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='wagtail_events',
-    version='0.2.2',
+    version='0.2.3',
     description='EventSeries features for Wagtail',
     author='thclark',
     url='https://github.com/thclark/wagtail_events',
