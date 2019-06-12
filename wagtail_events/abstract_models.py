@@ -175,8 +175,11 @@ class AbstractEventIndex(AbstractPaginatedIndex):
 
 class AbstractEvent(Page):
 
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField(blank=True, null=True)
+    start_date = models.DateTimeField(help_text='Event start time')
+    end_date = models.DateTimeField(blank=True, null=True, help_text='Event end time')
+    event_website = models.URLField(blank=True, null=True, help_text='Optional external link for the event or programme')
+    venue = models.TextField(blank=True, null=True, help_text='The event venue')
+    venue_website = models.URLField(blank=True, null=True, help_text='Link to the venue (or, say, a google maps pin)')
     objects = DatedEventManager()
 
     content_panels = [
