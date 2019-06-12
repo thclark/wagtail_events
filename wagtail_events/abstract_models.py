@@ -187,8 +187,16 @@ class AbstractEvent(Page):
             [
                 FieldPanel('start_date'),
                 FieldPanel('end_date'),
+                FieldPanel('event_website'),
             ],
-            heading="Event Start / End Dates"
+            heading="Event Details"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('venue'),
+                FieldPanel('venue_website'),
+            ],
+            heading="Venue Details"
         ),
     ]
 
