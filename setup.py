@@ -18,7 +18,7 @@ with open('README.md') as f:
 
 setup(
     name='wagtail_events',
-    version='0.2.7',
+    version='0.3.0',
     description='Event pages for Wagtail',
     long_description=readme_text,
     long_description_content_type="text/markdown",
