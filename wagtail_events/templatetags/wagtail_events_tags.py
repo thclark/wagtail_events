@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+
 try:
     from urllib.parse import urlencode
 except ImportError:
@@ -22,7 +23,7 @@ def querystring(context, *args, **kwargs):
     :return: string|encoded params as urlstring
     """
     try:
-        params = context['request'].GET.dict()
+        params = context["request"].GET.dict()
     except (KeyError, AttributeError):
         params = {}
     else:
@@ -42,9 +43,9 @@ def _patch(context, key, data):
     :param data: item value
     :return: patched url params
     """
-    getvars = dict(context['request'].GET)
+    getvars = dict(context["request"].GET)
     getvars[key] = [data]
-    return '?{0}'.format(urlencode(getvars, doseq=True))
+    return "?{0}".format(urlencode(getvars, doseq=True))
 
 
 @register.simple_tag(takes_context=True)
@@ -56,7 +57,7 @@ def patch_scope(context, scope):
     :param scope:
     :return:
     """
-    return _patch(context, 'scope', scope)
+    return _patch(context, "scope", scope)
 
 
 @register.simple_tag(takes_context=True)
@@ -68,4 +69,4 @@ def patch_start_date(context, date):
     :param date: start_date
     :return:
     """
-    return _patch(context, 'start_date', date.strftime('%Y.%m.%d'))
+    return _patch(context, "start_date", date.strftime("%Y.%m.%d"))

@@ -2,7 +2,7 @@ dist: trusty
 language: python
 python:
   - '3.6'
-  
+
 # Install tox and codecov
 install:
   - pip install tox-travis
