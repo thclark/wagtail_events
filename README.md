@@ -1,4 +1,7 @@
-# Wagtail Events [![Build Status](https://travis-ci.com/thclark/wagtail_events.svg?branch=master)](https://travis-ci.com/thclark/wagtail_events)
+[![codecov](https://codecov.io/gh/thclark/wagtail_events/branch/master/graph/badge.svg)](https://codecov.io/gh/thclark/wagtail_events)
+[![Build Status](https://travis-ci.com/thclark/wagtail_events.svg?branch=master)](https://travis-ci.com/thclark/wagtail_events)
+
+# Wagtail Events
 
 Events calendar management for wagtail, with tools for filtering by date.
 
@@ -11,7 +14,7 @@ templates for managing the events on wagtail (for now). But see below for how to
 If you'd like to make a PR with decent quality templates, I'm very open to collaboration, providing you're committed to maintaing them for a decent period of time :)
 
 I'm gradually improving wagtail admin templates, I'll do an ever-better job as the library gets more traction and users.
-**Bottom line: Star this repo on Github if you use or like it, so I know it's getting traction!** 
+**Bottom line: Star this repo on Github if you use or like it, so I know it's getting traction!**
 
 ## Background
 
@@ -25,8 +28,8 @@ and have control of the release versioning (which isn't close to ready for v1.x 
  - I'm basically about to break *everything* for django 2.x and wagtail 2.x, so I'd need a major version bump anyway, and
  figured that the chances of getting my changes merged into the upstream were nil.
  - The rich text fields make ``omni-wagtail-events`` a nightmare to use in headless API mode, and mean that most of the
- events data is unstructured. Here, we move to Wagtail's ``StreamField``... but that creates a 
- [migration headache](http://docs.wagtail.io/en/v2.4/topics/streamfield.html#migrating-richtextfields-to-streamfield) 
+ events data is unstructured. Here, we move to Wagtail's ``StreamField``... but that creates a
+ [migration headache](http://docs.wagtail.io/en/v2.4/topics/streamfield.html#migrating-richtextfields-to-streamfield)
  unless we start fresh.
  - The migrations in the original project won't work with an in-memory database, so testing is slow.
  - I've majorly simplified the model structure to singleton events. I think this is all that's reqiured in 99.9% of cases.
