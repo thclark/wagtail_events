@@ -1,26 +1,27 @@
 import datetime
 import re
 from django.core.exceptions import ValidationError
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.utils import timezone
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.core.models import Page
-
-from wagtail_events import date_filters
 from wagtail_events.managers import DatedEventManager
-from wagtail_events import utils
 from wagtail_events.utils import _DATE_FORMAT_RE
+
+from wagtail_events import date_filters, utils
 
 
 class AbstractPaginatedIndex(Page):
     """ """
+
     paginate_by = models.PositiveIntegerField(blank=True, null=True)
-    content_panels = Page.content_panels + [FieldPanel('paginate_by')]
+    content_panels = Page.content_panels + [FieldPanel("paginate_by")]
     paginator_class = Paginator
 
     class Meta(object):
         """Django model meta options."""
+
         abstract = True
 
     def _get_children(self, request, *args, **kwargs):
@@ -75,11 +76,7 @@ class AbstractPaginatedIndex(Page):
         :param page: Raw page number taken from the request dict
         :return: Queryset of child model instances
         """
-        paginator = self.get_paginator(
-            queryset,
-            self.paginate_by,
-            **self.get_paginator_kwargs()
-        )
+        paginator = self.get_paginator(queryset, self.paginate_by, **self.get_paginator_kwargs())
         try:
             queryset = paginator.page(page)
         except PageNotAnInteger:
@@ -97,11 +94,7 @@ class AbstractPaginatedIndex(Page):
         :param kwargs: default keyword args
         :return: Context data to use when rendering the template
         """
-        context = super(AbstractPaginatedIndex, self).get_context(
-            request,
-            *args,
-            **kwargs
-        )
+        context = super(AbstractPaginatedIndex, self).get_context(request, *args, **kwargs)
         queryset = self._get_children(request, *args, **kwargs)
         is_paginated = False
         paginator = None
@@ -109,22 +102,14 @@ class AbstractPaginatedIndex(Page):
         # Paginate the child nodes if paginate_by has been specified
         if self.paginate_by:
             is_paginated = True
-            page_num = request.GET.get('page', 1) or 1
-            queryset['items'], paginator = self.paginate_queryset(
-                queryset['items'],
-                page_num
-            )
+            page_num = request.GET.get("page", 1) or 1
+            queryset["items"], paginator = self.paginate_queryset(queryset["items"], page_num)
 
-        context.update(
-            children=queryset,
-            paginator=paginator,
-            is_paginated=is_paginated
-        )
+        context.update(children=queryset, paginator=paginator, is_paginated=is_paginated)
         return context
 
 
 class AbstractEventIndex(AbstractPaginatedIndex):
-
     class Meta(object):
         abstract = True
 
@@ -142,27 +127,22 @@ class AbstractEventIndex(AbstractPaginatedIndex):
         qs = super(AbstractEventIndex, self)._get_children(request).specific()
 
         time_periods = {
-            'year': date_filters.get_year_range,
-            'week': date_filters.get_week_range,
-            'month': date_filters.get_month_range,
-            'day': date_filters.get_day_range,
+            "year": date_filters.get_year_range,
+            "week": date_filters.get_week_range,
+            "month": date_filters.get_month_range,
+            "day": date_filters.get_day_range,
         }
-        period = request.GET.get('scope', None)
+        period = request.GET.get("scope", None)
 
         if period:
 
             # Get the start date from the request (or use default now)
-            start_date = request.GET.get('start_date', '')
+            start_date = request.GET.get("start_date", "")
             if re.match(self.get_dateformat(), start_date):
-                date_params = [int(i) for i in start_date.split('.')]
+                date_params = [int(i) for i in start_date.split(".")]
                 start_date = utils.date_to_datetime(datetime.date(*date_params))
             else:
-                start_date = timezone.now().replace(
-                    hour=0,
-                    minute=0,
-                    second=0,
-                    microsecond=0,
-                )
+                start_date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0,)
 
             # Clean the start and end dates to conform to the requested period
             start_date, end_date = time_periods[period.lower()](start_date)
@@ -175,41 +155,32 @@ class AbstractEventIndex(AbstractPaginatedIndex):
 
 class AbstractEvent(Page):
 
-    start_date = models.DateTimeField(help_text='Event start time')
-    end_date = models.DateTimeField(blank=True, null=True, help_text='Event end time')
-    event_website = models.URLField(blank=True, null=True, help_text='Optional external link for the event or programme')
-    venue = models.TextField(blank=True, null=True, help_text='The event venue')
-    venue_website = models.URLField(blank=True, null=True, help_text='Link to the venue (or, say, a google maps pin)')
+    start_date = models.DateTimeField(help_text="Event start time")
+    end_date = models.DateTimeField(blank=True, null=True, help_text="Event end time")
+    event_website = models.URLField(
+        blank=True, null=True, help_text="Optional external link for the event or programme"
+    )
+    venue = models.TextField(blank=True, null=True, help_text="The event venue")
+    venue_website = models.URLField(blank=True, null=True, help_text="Link to the venue (or, say, a google maps pin)")
     objects = DatedEventManager()
 
     content_panels = [
         MultiFieldPanel(
-            [
-                FieldPanel('start_date'),
-                FieldPanel('end_date'),
-                FieldPanel('event_website'),
-            ],
-            heading="Event Details"
+            [FieldPanel("start_date"), FieldPanel("end_date"), FieldPanel("event_website")], heading="Event Details"
         ),
-        MultiFieldPanel(
-            [
-                FieldPanel('venue'),
-                FieldPanel('venue_website'),
-            ],
-            heading="Venue Details"
-        ),
+        MultiFieldPanel([FieldPanel("venue"), FieldPanel("venue_website")], heading="Venue Details"),
     ]
 
-    parent_page_types = ['wagtail_events.EventIndex']
+    parent_page_types = ["wagtail_events.EventIndex"]
     subpage_types = []
 
     class Meta(object):
         abstract = True
-        ordering = ['start_date']
+        ordering = ["start_date"]
 
     def clean(self):
         """Clean the model fields, if end_date is before start_date raise a ValidationError."""
         super(AbstractEvent, self).clean()
         if self.end_date:
             if self.end_date < self.start_date:
-                raise ValidationError({'end_date': 'The end date cannot be before the start date.'})
+                raise ValidationError({"end_date": "The end date cannot be before the start date."})

@@ -1,13 +1,12 @@
 import calendar
 import datetime
-
 from django.utils import timezone
 
 
-_DATE_FORMAT_RE = r'^([0-9]){4}\.([0-9]){2}\.([0-9]){2}$'
+_DATE_FORMAT_RE = r"^([0-9]){4}\.([0-9]){2}\.([0-9]){2}$"
 
 
-def date_to_datetime(date, time_choice='min'):
+def date_to_datetime(date, time_choice="min"):
     """
     Convert date to datetime.
 
@@ -15,11 +14,8 @@ def date_to_datetime(date, time_choice='min'):
     :param time_choice: max or min
     :return: datetime
     """
-    choice = getattr(datetime.datetime, 'min' if time_choice == 'min' else 'max').time()
-    return timezone.make_aware(
-        datetime.datetime.combine(date, choice),
-        timezone.get_current_timezone(),
-    )
+    choice = getattr(datetime.datetime, "min" if time_choice == "min" else "max").time()
+    return timezone.make_aware(datetime.datetime.combine(date, choice), timezone.get_current_timezone(),)
 
 
 def add_months(date, months):

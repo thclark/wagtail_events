@@ -11,36 +11,33 @@
 #   To deploy on PYPI follow the instructions at the bottom of:
 #       https://packaging.python.org/tutorials/distributing-packages/#uploading-your-project-to-pypi
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
-with open('README.md') as f:
+
+with open("README.md") as f:
     readme_text = f.read()
 
 setup(
-    name='wagtail_events',
-    version='0.4.0',
-    description='Event pages for Wagtail',
+    name="wagtail_events",
+    version="0.5.0",
+    description="Event pages for Wagtail",
     long_description=readme_text,
     long_description_content_type="text/markdown",
-    author='thclark',
-    author_email='withheld.find@me.at.github.com',
-    url='https://github.com/thclark/wagtail_events',
-    packages=find_packages(exclude=('tests', 'docs')),
-    license='MIT',
+    author="thclark",
+    author_email="withheld.find@me.at.github.com",
+    url="https://github.com/thclark/wagtail_events",
+    packages=find_packages(exclude=("tests", "docs")),
+    license="MIT",
     classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        "Operating System :: OS Independent"
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Operating System :: OS Independent",
     ],
     include_package_data=True,
-    install_requires=[
-        'wagtail>=2.3',
-        'isoweek==1.3.3',
-        'python-dateutil==2.8.0'
-    ],
-    keywords=['wagtail', 'django', 'events']
+    install_requires=["wagtail>=2.3", "isoweek>=1.3.3", "python-dateutil>=2.8.0"],
+    keywords=["wagtail", "django", "events"],
 )

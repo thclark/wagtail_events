@@ -7,6 +7,7 @@ from wagtail_events import abstract_models
 
 class TestAbstractPaginatedIndex(TestCase):
     """Tests for the AbstractPaginatedIndex model."""
+
     def setUp(self):
         self.model = abstract_models.AbstractPaginatedIndex
 
@@ -16,7 +17,7 @@ class TestAbstractPaginatedIndex(TestCase):
 
     def test_paginate_by(self):
         """Test AbstractPaginatedIndex.paginate_by field type."""
-        field = self.model._meta.get_field('paginate_by')
+        field = self.model._meta.get_field("paginate_by")
         self.assertIsInstance(field, models.PositiveIntegerField)
         self.assertTrue(field.blank)
         self.assertTrue(field.null)
@@ -24,9 +25,7 @@ class TestAbstractPaginatedIndex(TestCase):
 
 class TestAbstractEventIndex(TestCase):
     """Tests for the AbstractEventIndex model."""
+
     def test_parent_class(self):
         """The model should inhert from page & AbstractPaginatedIndex."""
-        self.assertTrue(issubclass(
-            abstract_models.AbstractEventIndex,
-            abstract_models.AbstractPaginatedIndex
-        ))
+        self.assertTrue(issubclass(abstract_models.AbstractEventIndex, abstract_models.AbstractPaginatedIndex))

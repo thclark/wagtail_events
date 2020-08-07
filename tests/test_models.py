@@ -1,23 +1,18 @@
-# from datetime import timedelta
-# from django.core.exceptions import ValidationError
-# from django.core.paginator import Page as PaginatorPage
+from unittest.mock import Mock, patch
 from django.core.paginator import Paginator
 from django.test import RequestFactory, TestCase
 from django.utils import timezone
-from mock import patch, Mock
-# from modelcluster.fields import ParentalKey
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
-# from wagtail_factories import SiteFactory
+from wagtail_events.utils import _DATE_FORMAT_RE
 
 from tests import factories
-from wagtail_events import abstract_models
-from wagtail_events import models
-from wagtail_events.utils import _DATE_FORMAT_RE
+from wagtail_events import abstract_models, models
 
 
 class TestEvent(TestCase):
     """Tests for the Event model."""
+
     def setUp(self):
         self.model = models.Event
 
@@ -29,7 +24,7 @@ class TestEvent(TestCase):
 
     def test_body(self):
         """Test the Event.body field."""
-        field = self.model._meta.get_field('body')
+        field = self.model._meta.get_field("body")
 
         self.assertIsInstance(field, StreamField)
         self.assertTrue(field.blank)
@@ -38,31 +33,18 @@ class TestEvent(TestCase):
 
 class TestEventIndex(TestCase):
     """Tests for the EventIndex model."""
+
     def setUp(self):
         self.model = models.EventIndex
-        self.index = factories.EventIndexFactory.create(
-            parent=None,
-            paginate_by=10
-        )
-        self.detail = factories.EventFactory.create(
-            parent=self.index,
-            show_in_menus=True,
-            start_date=timezone.now(),
-        )
-        self.detail_2 = factories.EventFactory.create(
-            parent=self.index,
-            show_in_menus=True,
-            start_date=timezone.now(),
-        )
-        self.request = RequestFactory().get('')
+        self.index = factories.EventIndexFactory.create(parent=None, paginate_by=10)
+        self.detail = factories.EventFactory.create(parent=self.index, show_in_menus=True, start_date=timezone.now(),)
+        self.detail_2 = factories.EventFactory.create(parent=self.index, show_in_menus=True, start_date=timezone.now(),)
+        self.request = RequestFactory().get("")
         self.request.is_preview = False
 
     def test_parent_class(self):
         """EventIndex should inherit from AbstractEventIndex."""
-        self.assertTrue(issubclass(
-            self.model,
-            abstract_models.AbstractEventIndex
-        ))
+        self.assertTrue(issubclass(self.model, abstract_models.AbstractEventIndex))
 
     # def test_body(self):
     #     """Test the EventIndex.body field."""
@@ -83,10 +65,7 @@ class TestEventIndex(TestCase):
         When scope & start_date querystrings are provided the list of children
         will be filtered depending on scope from the startime.
         """
-        request = RequestFactory().get('', {
-            'scope': 'year',
-            'start_date': timezone.now().strftime('%Y.01.01'),
-        })
+        request = RequestFactory().get("", {"scope": "year", "start_date": timezone.now().strftime("%Y.01.01")})
         request.is_preview = False
         response = self.index._get_children(request)
         self.assertEqual(response.all()[0].pk, self.detail.pk)
@@ -115,14 +94,11 @@ class TestEventIndex(TestCase):
 
         # Test the overridden implementation returns the expected class
         self.index.paginator_class = Mock()
-        self.assertEqual(
-            self.index.get_paginator_class(),
-            self.index.paginator_class
-        )
+        self.assertEqual(self.index.get_paginator_class(), self.index.paginator_class)
 
     def test_get_paginator(self):
         """The _get_paginator method should return a paginator instance"""
-        object_list = ['foo', 'bar', 'baz']
+        object_list = ["foo", "bar", "baz"]
         paginator = self.index.get_paginator(object_list, 1)
         self.assertIsInstance(paginator, Paginator)
         self.assertEqual(paginator.object_list, object_list)
@@ -140,16 +116,15 @@ class TestEventIndex(TestCase):
     #     self.assertEqual(paginator.num_pages, 1)
 
     @patch(
-        'wagtail_events.abstract_models.AbstractPaginatedIndex.get_paginator_kwargs',
-        Mock(return_value={'foo': 'bar'})
+        "wagtail_events.abstract_models.AbstractPaginatedIndex.get_paginator_kwargs", Mock(return_value={"foo": "bar"})
     )
-    @patch('wagtail_events.abstract_models.AbstractPaginatedIndex.get_paginator')
+    @patch("wagtail_events.abstract_models.AbstractPaginatedIndex.get_paginator")
     def test_paginate_queryset_calls_get_paginator(self, get_paginator):
         """paginate_queryset should call the get_paginator method."""
         self.request.is_preview = True
         children = self.index._get_children(self.request)
         self.index.paginate_queryset(children, 1)
-        get_paginator.assert_called_with(children, self.index.paginate_by, foo='bar')
+        get_paginator.assert_called_with(children, self.index.paginate_by, foo="bar")
 
     # def test_pagination(self):
     #     """Test EventIndex.get_context paginates correctly."""

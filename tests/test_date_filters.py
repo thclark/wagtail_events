@@ -4,18 +4,18 @@ from django.test import TestCase
 from django.utils import timezone
 
 from tests.factories import EventFactory
+
+
 # from wagtail_events import date_filters
 # from wagtail_events.models import Event
 
 
 class TestAgendas(TestCase):
     """Tests for the get_*_agenda methods."""
+
     def setUp(self):
         self.now = timezone.now()
-        self.detail = EventFactory.create(
-            parent=None,
-            start_date=self.now
-        )
+        self.detail = EventFactory.create(parent=None, start_date=self.now)
 
     # def test_get_year_agenda(self):
     #     """Test get_year_agenda returns the expected data."""
