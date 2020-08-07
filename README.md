@@ -41,7 +41,8 @@ this originated as your baby so if you'd like to take back maintenance, please r
 
 ## Requirements
 
-Wagtail events is tested against python 3.6-3.9, Django 2.1-3.0 or later and Wagtail 2.3-2.9, anything outside those bounds and you're on your own.
+Wagtail events is tested against a range of python, django and wagtail versions - see tox.ini for the full test matrix.
+Use out of these bounds and you're on your own!
 
 ## Getting started
 
