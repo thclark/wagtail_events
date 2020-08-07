@@ -39,8 +39,8 @@ setup(
     include_package_data=True,
     install_requires=[
         'wagtail>=2.3',
-        'isoweek==1.3.3',
-        'python-dateutil==2.8.0'
+        'isoweek>=1.3.3',
+        'python-dateutil>=2.8.0'
     ],
     keywords=['wagtail', 'django', 'events']
 )
