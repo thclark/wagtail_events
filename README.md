@@ -2,6 +2,19 @@
 
 Events calendar management for wagtail, with tools for filtering by date.
 
+## Templates
+
+**"But, where are the templates?!"** is a natural question. Answer: There aren't any templates or tags so far...
+I run all my wagtail installations in headless mode with a react front end [like this example](https://www.traffickingpast.uk/events), so can only justify putting in place the
+templates for managing the events on wagtail (for now). But see below for how to do it yourself.
+
+If you'd like to make a PR with decent quality templates, I'm very open to collaboration, providing you're committed to maintaing them for a decent period of time :)
+
+I'm gradually improving wagtail admin templates, I'll do an ever-better job as the library gets more traction and users.
+**Bottom line: Star this repo on Github if you use or like it, so I know it's getting traction!** 
+
+## Background
+
 This project is a hard fork of [omni-wagtail-events](http://github.com/omni-digital-omni-wagtail-events), and we owe a
 debt of gratitude to those folks for getting us started. So why did I hard-fork (duplicate and start again) rather than
 fork from omni-digital?
@@ -25,15 +38,7 @@ this originated as your baby so if you'd like to take back maintenance, please r
 
 ## Requirements
 
-Wagtail events requires Django 2.1 or later and Wagtail 2.3 or later.
-
-## Supported Versions
-
-Python: 3.6
-
-Django: 2.1
-
-Wagtail: 2.3
+Wagtail events is tested against python 3.6-3.9, Django 2.1-3.0 or later and Wagtail 2.3-2.9, anything outside those bounds and you're on your own.
 
 ## Getting started
 
@@ -68,3 +73,10 @@ An index/listing page for EventSeries instances, with optional pagination.
 ### Event
 
 A detail page for an event, with start_date and optional end_date, implementing a manager which allows filtering on those dates.
+
+
+## Abstract Models
+
+You can use the abstract models and change them to suit your own needs:
+- Do not install the app (don't enter it in `INSTALLED_APPS`)
+- Create your own models inheriting from `wagtail_events.abstract_models.AbstractEvent` and `wagtail_events.abstract_models.AbstractEventIndex`
