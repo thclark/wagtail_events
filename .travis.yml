@@ -1,11 +1,21 @@
 dist: trusty
 language: python
 python:
-- '3.6'
+  - '3.6'
+  
+# Install tox and codecov
 install:
-- pip install tox-travis
+  - pip install tox-travis
+  - pip install codecov
+
+# Use tox to run tests in the matrix of environments
 script:
-- tox -r
+  - tox -r
+
+# Push the results back to codecov
+after_success:
+  - coverage xml && codecov -f coverage.xml --commit=$TRAVIS_COMMIT
+
 deploy:
   provider: pypi
   skip_cleanup: true
