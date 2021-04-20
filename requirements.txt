@@ -4,6 +4,6 @@ mock==2.0.0
 psycopg2==2.7.7
 python-dateutil==2.6.0
 djangorestframework
-wagtail==2.3
+wagtail==2.11.6
 wagtail-factories==1.1.0
 tox==3.7.0
